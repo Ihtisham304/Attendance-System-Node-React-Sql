@@ -8,7 +8,7 @@ exports.registerUser = async (req, res) => {
     const { username, password, email } = req.body;
     let profile_picture = req.file ? req.file.filename : null;
     try {
-        // Check if the email is already registered
+
         const checkEmailSql = 'SELECT * FROM users WHERE email = ?';
         db.query(checkEmailSql, [email], async (err, results) => {
             if (err) {
@@ -16,11 +16,11 @@ exports.registerUser = async (req, res) => {
             }
 
             if (results.length > 0) {
-                // Return early if the email is already registered
+
                 return res.status(400).json({ status: false, message: "User With This Email Already Exists" });
             }
 
-            // If email does not exist, proceed with registration
+
             try {
                 const hashedPassword = await bcrypt.hash(password, 10);
                 const sql = `INSERT INTO users (username, password, email, profile_picture) VALUES (?, ?, ?, ?)`;
@@ -51,14 +51,15 @@ exports.login = async (req, res) => {
                 return res.status(500).json({ message: "Error checking email", error: err });
             }
             if (results.length === 0) {
-                return res.status(400).json({ status: false, message: "User With This Email Is Not Registered" });
+                console.log(results);
+                return res.json({ status: false, message: "User With This Email Is Not Registered"});
             }
 
             const user = results[0];
 
             const passwordCheck = await bcrypt.compare(password, user.password);
             if (!passwordCheck) {
-                return res.status(400).json({ status: false, message: "Incorrect Password" });
+                return res.json({ status: false, message: "Incorrect Password" });
             }
             const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
 
@@ -133,7 +134,7 @@ exports.updateProfilePicture = async (req, res) => {
 }
 
 exports.leaveRequest = async (req, res) => {
-    const { startDate, endDate, reason,userId } = req.body;
+    const { startDate, endDate, reason, userId } = req.body;
 
     if (!startDate || !endDate || !reason) {
         return res.status(400).json({ message: 'All fields are required.' });

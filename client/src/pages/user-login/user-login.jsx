@@ -14,11 +14,11 @@ const UserLogin = ({setToken}) => {
     e.preventDefault();
     try {
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/login`, login);
+      console.log(response.data);
       if (response.data.status) {
         const token = response.data.token;
         localStorage.setItem('token', token);
         alert(`${response.data.message}`);
-        // window.location.reload();
         setToken(token);
       }
       else{
