@@ -1,0 +1,8 @@
+# Ignore node_modules folder content
+node_modules/
+
+# Ignore .env file
+.env
+
+# Ignore only files inside public/images, not the public folder itself
+public/images/

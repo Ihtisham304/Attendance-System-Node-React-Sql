@@ -1,0 +1,12 @@
+.sidebar{
+    background-color: #010437 !important;
+    width: 15% !important;
+
+}
+.sidebar .nav{
+    padding: 0px !important;
+}
+.sidebar ul li button:hover{
+       
+      background-color: crimson;
+}
